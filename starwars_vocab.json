@@ -1,0 +1,71 @@
+{
+  "planets": [
+    "CORUSCANT", "NABOO", "TATOOINE", "KASHYYYK", "BATUU",
+    "TAKODANA", "CHANDRILA", "CORELLIA", "JAKKU", "ENDOR",
+    "HOTH", "DAGOBAH", "BESPIN", "MUSTAFAR", "KAMINO",
+    "GEONOSIS", "ALDERAAN", "YAVIN", "MANDALORE", "LOTHAL",
+    "SCARIF", "JEDHA", "DANTOOINE", "KESSEL", "CRAIT",
+    "EXEGOL", "AHCH-TO", "HOSNIAN PRIME", "CANTONICA",
+    "VARDOS", "SULLUST", "MON CALA", "RYLOTH", "FELUCIA",
+    "DATHOMIR", "ILUM", "CHRISTOPHSIS", "UMBARA", "UTAPAU",
+    "RODIA", "KUAT", "FONDOR", "BOTHAWUI", "MALASTARE",
+    "CATO NEIMOIDIA", "MYGEETO", "SALEUCAMI", "TETH",
+    "FLORRUM", "ONDERON", "CONCORDIA", "NEVARRO", "SORGAN",
+    "ARVALA-7", "TRASK", "TYTHON", "MORAK", "SEATOS"
+  ],
+  "cities_locations": [
+    "BLACK SPIRE OUTPOST", "MOS EISLEY", "MOS ESPA",
+    "THEED", "CLOUD CITY", "GALACTIC CITY", "TIPOCA CITY",
+    "NIIMA OUTPOST", "CANTO BIGHT", "IZIZ", "SUNDARI",
+    "CORONET CITY", "HANNA CITY", "KELDABE"
+  ],
+  "common_words": [
+    "ARRIVALS", "DEPARTURES", "GATE", "PLATFORM", "DOCKING BAY",
+    "ON TIME", "DELAYED", "CANCELLED", "BOARDING", "LANDED",
+    "NOW BOARDING", "FINAL CALL", "DEPARTED",
+    "TRANSPORT", "SHUTTLE", "FREIGHTER", "CRUISER",
+    "FLIGHT", "ROUTE", "DESTINATION", "STATUS", "TIME",
+    "SPACEPORT", "TERMINAL", "BAY", "HANGAR",
+    "GALACTIC", "IMPERIAL", "REBEL", "REPUBLIC", "ALLIANCE",
+    "FIRST ORDER", "RESISTANCE", "EMPIRE", "JEDI", "SITH",
+    "CREDITS", "CANTINA", "DROIDS", "WARNING", "DANGER",
+    "RESTRICTED", "AUTHORIZED", "PERSONNEL", "ONLY",
+    "DO NOT ENTER", "EXIT", "ENTRANCE", "OPEN", "CLOSED",
+    "WELCOME", "STAR", "WARS", "FORCE", "DARK SIDE", "LIGHT",
+    "NO DROIDS", "FUEL", "REPAIRS", "CARGO", "PASSENGERS"
+  ],
+  "airlines_routes": [
+    "STAR TOURS", "GALACTIC STARCRUISER", "CHANDRILA STAR LINE",
+    "CORELLIAN RUN", "HYDIAN WAY", "PERLEMIAN TRADE ROUTE",
+    "KESSEL RUN", "RIMMA TRADE ROUTE", "OUTER RIM",
+    "INNER RIM", "MID RIM", "CORE WORLDS", "WILD SPACE"
+  ],
+  "board_structure_hints": {
+    "departure_board_columns": ["ROUTE/FLIGHT", "FLIGHT NUMBER", "DEPARTURE TIME", "ARRIVAL TIME", "DESTINATION", "STATUS", "GATE/PLATFORM"],
+    "sign_types": ["departure_board", "arrival_board", "directional_sign", "shop_sign", "warning_sign", "propaganda_poster", "product_label"]
+  },
+  "known_boards": {
+    "star_tours_departure_board": {
+      "description": "The departure board at Star Tours attraction (Disneyland/Disney World). Red/orange LED-style Aurebesh text on dark background.",
+      "header_text": "DEPARTURES",
+      "column_headers": ["ROUTE", "FLIGHT", "DEPART", "ARRIVE", "DESTINATION", "STATUS", "GATE"],
+      "known_route_names": ["CHANDRILA STAR LINE", "STAR TOURS", "JADE MOON", "NABOO LINES", "KAFRENE EXPRESS"],
+      "known_destinations": ["JAKKU", "NABOO", "CORUSCANT", "KASHYYYK", "TAKODANA", "BATUU", "HOTH", "TATOOINE", "KESSEL", "ENDOR", "MUSTAFAR", "DAGOBAH", "CRAIT", "SCARIF", "LOTHAL", "VANDOR"],
+      "known_statuses": ["ON TIME", "CANCELLED", "DELAYED", "BOARDING", "DEPARTED", "NOW BOARDING", "SEE AGENT"],
+      "typical_gate_numbers": ["1A", "1B", "2", "2K", "3", "5", "7", "10", "12", "14", "17", "25", "27"],
+      "visual_style": "Red/orange LED glowing text, dark background, numbers in Arabic numerals, 8-10 data rows",
+      "decoded_example_rows": [
+        {"route": "CHANDRILA STAR LINE", "flight": 526, "depart": "0950", "arrive": "1420", "destination": "JAKKU", "status": "ON TIME", "gate": "2K"},
+        {"route": "STAR TOURS", "flight": 1027, "depart": "0712", "arrive": "0650", "destination": "NABOO", "status": "ON TIME", "gate": "17"},
+        {"route": "STAR TOURS", "flight": 712, "depart": "0735", "arrive": null, "destination": "ON APPROACH", "status": null, "gate": "1A"},
+        {"route": "JADE MOON", "flight": 1009, "depart": "0310", "arrive": "1045", "destination": "ON TIME", "status": "KASHYYYK", "gate": "N"},
+        {"route": "NABOO LINES", "flight": 310, "depart": "1820", "arrive": null, "destination": "KASHYYYK", "status": null, "gate": null},
+        {"route": "CHANDRILA STAR LINE", "flight": 1222, "depart": "1820", "arrive": null, "destination": "NABOO", "status": null, "gate": "27"},
+        {"route": "STAR TOURS", "flight": 712, "depart": "0650", "arrive": null, "destination": "NABOO", "status": null, "gate": null},
+        {"route": "CHANDRILA STAR LINE", "flight": 410, "depart": "1220", "arrive": null, "destination": "ON TIME", "status": null, "gate": "1K"},
+        {"route": "STAR TOURS", "flight": 928, "depart": "1640", "arrive": null, "destination": "ON TIME", "status": null, "gate": "10"},
+        {"route": "NABOO LINES", "flight": 521, "depart": "1815", "arrive": null, "destination": "ON TIME", "status": null, "gate": "2K"}
+      ]
+    }
+  }
+}

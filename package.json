@@ -1,0 +1,31 @@
+{
+  "name": "twilio_aurebesh_public",
+  "version": "1.0.0",
+  "description": "Star Wars Aurebesh Translator \u2014 Web Interface",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test.js",
+    "stop": "node stop.js"
+  },
+  "keywords": [
+    "star-wars",
+    "aurebesh",
+    "translator",
+    "web"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^3.2.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2",
+    "openai": "^6.39.0",
+    "pixelmatch": "^5.3.0",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.5",
+    "twilio": "^6.2.0"
+  }
+}

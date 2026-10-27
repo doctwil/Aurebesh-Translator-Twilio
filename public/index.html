@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✦ Aurebesh Translator — Star Wars</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a1a;
+      color: #c8d8e8;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Starfield background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        radial-gradient(1px 1px at 20% 30%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 40% 70%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 60% 20%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 80% 50%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1.5px 1.5px at 10% 80%, #ffd700 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 70% 90%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 50% 10%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 90% 40%, #ffffff 0.5px, transparent 1px),
+        radial-gradient(1.5px 1.5px at 30% 55%, #88aacc 0.5px, transparent 1px),
+        radial-gradient(1px 1px at 85% 15%, #ffffff 0.5px, transparent 1px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      color: #ffd700;
+      font-size: 2.2em;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      margin-bottom: 8px;
+      letter-spacing: 3px;
+    }
+
+    .subtitle {
+      color: #88aacc;
+      font-size: 0.9em;
+      letter-spacing: 2px;
+    }
+
+    .translator-box {
+      background: rgba(15, 15, 40, 0.9);
+      border: 1px solid #334466;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 30px rgba(0, 100, 200, 0.1), inset 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .mode-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .mode-btn {
+      padding: 10px 20px;
+      border: 1px solid #445566;
+      background: rgba(30, 40, 60, 0.8);
+      color: #88aacc;
+      font-family: inherit;
+      font-size: 0.85em;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .mode-btn:hover {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+
+    .mode-btn.active {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: #ffd700;
+      color: #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    .input-area {
+      margin-bottom: 20px;
+    }
+
+    .input-area label {
+      display: block;
+      color: #ffd700;
+      margin-bottom: 8px;
+      font-size: 0.85em;
+      letter-spacing: 1px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: rgba(5, 5, 20, 0.8);
+      border: 1px solid #334466;
+      border-radius: 8px;
+      color: #e0e8f0;
+      font-family: inherit;
+      font-size: 1em;
+      padding: 15px;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+    }
+
+    textarea::placeholder {
+      color: #556677;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .translate-btn {
+      flex: 1;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #b8860b, #ffd700);
+      border: none;
+      border-radius: 8px;
+      color: #0a0a1a;
+      font-family: inherit;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: all 0.3s;
+    }
+
+    .translate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .translate-btn:active {
+      transform: translateY(0);
+    }
+
+    .image-btn {
+      padding: 14px 24px;
+      background: rgba(30, 40, 60, 0.8);
+      border: 1px solid #ffd700;
+      border-radius: 8px;
+      color: #ffd700;
+      font-family: inherit;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+
+    .image-btn:hover {
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .image-btn.active {
+      background: rgba(255, 215, 0, 0.15);
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);
+    }
+
+    .call-panel {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(5, 5, 20, 0.6);
+      border: 1px solid #554422;
+      border-radius: 8px;
+    }
+
+    .call-panel.visible {
+      display: block;
+    }
+
+    .call-panel label {
+      display: block;
+      color: #ffd700;
+      font-size: 0.8em;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .call-panel input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 15px;
+      background: rgba(5, 5, 20, 0.8);
+      border: 1px solid #334466;
+      border-radius: 8px;
+      color: #e0e8f0;
+      font-family: inherit;
+      font-size: 1em;
+    }
+
+    .call-panel input:focus {
+      outline: none;
+      border-color: #ffd700;
+    }
+
+    .call-hint {
+      color: #667788;
+      font-size: 0.75em;
+      margin-top: 8px;
+    }
+
+    .call-status {
+      margin-top: 12px;
+      color: #ffd700;
+      font-size: 0.9em;
+      letter-spacing: 1px;
+    }
+
+    .call-status.error {
+      color: #ff7777;
+    }
+
+    .result-area {
+      margin-top: 25px;
+      padding: 20px;
+      background: rgba(5, 5, 20, 0.6);
+      border: 1px solid #223344;
+      border-radius: 8px;
+      min-height: 60px;
+      display: none;
+    }
+
+    .result-area.visible {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .result-label {
+      color: #ffd700;
+      font-size: 0.8em;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .result-text {
+      color: #e0f0e0;
+      font-size: 1.1em;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .result-image {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .result-image img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      border-radius: 8px;
+      border: 1px solid #334466;
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: rgba(30, 40, 60, 0.8);
+      border: 1px solid #445566;
+      border-radius: 6px;
+      color: #88aacc;
+      font-family: inherit;
+      font-size: 0.8em;
+      text-decoration: none;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .download-btn:hover {
+      border-color: #ffd700;
+      color: #ffd700;
+    }
+
+    /* Alphabet reference */
+    .alphabet-section {
+      background: rgba(15, 15, 40, 0.9);
+      border: 1px solid #334466;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    .alphabet-section h2 {
+      color: #ffd700;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      letter-spacing: 2px;
+    }
+
+    .alphabet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .alpha-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(5, 5, 20, 0.5);
+      border-radius: 4px;
+      border: 1px solid #223344;
+    }
+
+    .alpha-letter {
+      color: #ffd700;
+      font-weight: bold;
+      width: 20px;
+    }
+
+    .alpha-name {
+      color: #88aacc;
+      font-size: 0.85em;
+    }
+
+    .history-section {
+      background: rgba(15, 15, 40, 0.9);
+      border: 1px solid #334466;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .history-section h2 {
+      color: #ffd700;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.2em;
+      letter-spacing: 2px;
+    }
+
+    .history-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .history-block {
+      padding: 18px;
+      background: rgba(5, 5, 20, 0.5);
+      border-radius: 8px;
+      border-left: 3px solid #ffd700;
+    }
+
+    .history-block h3 {
+      color: #ffd700;
+      font-size: 0.95em;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .history-block p {
+      color: #b0c4d8;
+      font-size: 0.88em;
+      line-height: 1.7;
+    }
+
+    .history-block strong {
+      color: #e0e8f0;
+    }
+
+    .history-block em {
+      color: #88aacc;
+    }
+
+    .info-section {
+      text-align: center;
+      padding: 20px;
+      color: #556677;
+      font-size: 0.8em;
+      line-height: 1.8;
+    }
+
+    .info-section a {
+      color: #88aacc;
+      text-decoration: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loading spinner */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #334466;
+      border-top-color: #ffd700;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5em; }
+      .container { padding: 20px 15px; }
+      .translator-box { padding: 20px; }
+      .btn-row { flex-direction: column; }
+      .alphabet-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .upload-area {
+      border: 2px dashed #334466;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #88aacc;
+    }
+
+    /* Scan result table styling */
+    .scan-table-wrap {
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    .scan-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85em;
+    }
+    .scan-table caption {
+      color: #ffd700;
+      font-weight: bold;
+      letter-spacing: 2px;
+      padding: 8px 0;
+      font-size: 1.1em;
+    }
+    .scan-table th {
+      background: rgba(255, 215, 0, 0.15);
+      color: #ffd700;
+      padding: 8px 10px;
+      border: 1px solid #334466;
+      text-align: left;
+      font-size: 0.85em;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .scan-table td {
+      padding: 6px 10px;
+      border: 1px solid #223344;
+      color: #c8e0f0;
+    }
+    .scan-table tbody tr:nth-child(even) {
+      background: rgba(20, 30, 50, 0.5);
+    }
+    .scan-table tbody tr:hover {
+      background: rgba(255, 215, 0, 0.05);
+    }
+    .scan-text-block {
+      margin: 10px 0;
+      padding: 12px;
+      background: rgba(5, 5, 20, 0.5);
+      border-left: 3px solid #ffd700;
+      border-radius: 4px;
+    }
+    .scan-line {
+      color: #e0f0e0;
+      margin: 4px 0;
+      font-size: 1.05em;
+    }
+    .scan-meta {
+      color: #88aacc;
+      font-size: 0.85em;
+      margin: 8px 0 4px;
+      padding-top: 8px;
+      border-top: 1px solid #223344;
+    }
+    .scan-meta strong {
+      color: #ffd700;
+    }
+    .upload-area:hover, .upload-area.dragover {
+      border-color: #ffd700;
+      background: rgba(255, 215, 0, 0.05);
+    }
+    .upload-icon {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .image-preview {
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>✦ AUREBESH TRANSLATOR ✦</h1>
+      <p class="subtitle">STAR WARS GALACTIC WRITING SYSTEM</p>
+    </header>
+
+    <div class="translator-box">
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="translate">ENGLISH → AUREBESH</button>
+        <button class="mode-btn" data-mode="decode">AUREBESH → ENGLISH</button>
+      </div>
+
+      <div class="input-area">
+        <label id="inputLabel">ENTER TEXT TO TRANSLATE</label>
+        <textarea id="inputText" placeholder="Type something... e.g. May the Force be with you"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="translate-btn" id="translateBtn">⟨ TRANSLATE ⟩</button>
+        <button class="image-btn" id="imageBtn">🖼 IMAGE</button>
+        <button class="image-btn" id="callToggleBtn" aria-expanded="false" aria-controls="callPanel">📞 VIA CALL</button>
+      </div>
+
+      <div class="call-panel" id="callPanel">
+        <label for="callPhone">HK-47 WILL CALL YOU AND READ THE TRANSLATION</label>
+        <div class="btn-row">
+          <input type="tel" class="call-phone" id="callPhone" placeholder="+353871234567" autocomplete="tel">
+          <button class="translate-btn" id="callBtn" style="flex: 0 0 auto;">⟨ CALL ME ⟩</button>
+          <button class="image-btn" id="callAddBtn" style="flex: 0 0 auto;" title="Add this number to known_contacts.json">＋ ADD NUMBER</button>
+        </div>
+        <p class="call-hint">International format (e.g. +353 for Ireland). The number must be listed in known_contacts.json — use ＋ ADD NUMBER to add it.</p>
+        <div class="call-status" id="callStatus" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="color: #88aacc; margin-top: 10px; font-size: 0.85em;">Accessing galactic archives...</p>
+      </div>
+
+      <div class="result-area" id="resultArea">
+        <div class="result-label" id="resultLabel">TRANSLATION</div>
+        <div class="result-text" id="resultText"></div>
+        <div class="result-image" id="resultImage"></div>
+      </div>
+    </div>
+
+    <div class="translator-box" id="aiSection">
+      <h3 style="color: #ffd700; text-align: center; margin-bottom: 15px; letter-spacing: 2px;">✦ AI DROID ASSISTANT ✦</h3>
+      <p style="color: #88aacc; text-align: center; font-size: 0.85em; margin-bottom: 15px;">Ask anything about Star Wars, Aurebesh, or the galaxy</p>
+      <div class="input-area">
+        <textarea id="aiInput" placeholder="e.g. What planet is the Jedi Temple on? / How do you say 'rebel' in Aurebesh?" style="height: 70px;"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="translate-btn" id="aiBtn" style="background: linear-gradient(135deg, #1a3a5c, #2a5a8c); color: #88ccff;">⟨ ASK THE DROID ⟩</button>
+        <button class="image-btn" id="aiCallToggleBtn" aria-expanded="false" aria-controls="aiCallPanel">📞 VIA CALL</button>
+      </div>
+
+      <div class="call-panel" id="aiCallPanel">
+        <label for="aiCallPhone">HK-47 WILL CALL YOU WITH ITS ANSWER</label>
+        <div class="btn-row">
+          <input type="tel" class="call-phone" id="aiCallPhone" placeholder="+353871234567" autocomplete="tel">
+          <button class="translate-btn" id="aiCallBtn" style="flex: 0 0 auto; background: linear-gradient(135deg, #1a3a5c, #2a5a8c); color: #88ccff;">⟨ ASK &amp; CALL ME ⟩</button>
+          <button class="image-btn" id="aiCallAddBtn" style="flex: 0 0 auto;" title="Add this number to known_contacts.json">＋ ADD NUMBER</button>
+        </div>
+        <p class="call-hint">International format (e.g. +353 for Ireland). The number must be listed in known_contacts.json — use ＋ ADD NUMBER to add it.</p>
+        <div class="call-status" id="aiCallStatus" role="status" aria-live="polite"></div>
+      </div>
+      <div class="loading" id="aiLoading">
+        <div class="spinner"></div>
+        <p style="color: #88aacc; margin-top: 10px; font-size: 0.85em;">Consulting the holocron archives...</p>
+      </div>
+      <div class="result-area" id="aiResult">
+        <div class="result-label">DROID RESPONSE</div>
+        <div class="result-text" id="aiAnswer"></div>
+      </div>
+    </div>
+
+    <div class="translator-box" id="scanSection">
+      <h3 style="color: #ffd700; text-align: center; margin-bottom: 15px; letter-spacing: 2px;">✦ AUREBESH IMAGE SCANNER ✦</h3>
+      <p style="color: #88aacc; text-align: center; font-size: 0.85em; margin-bottom: 15px;">Upload a photo or paste a URL — works with departure boards, signs, labels, screenshots</p>
+      <div class="input-area">
+        <label style="color: #88aacc; font-size: 0.8em;">IMAGE URL (optional — paste a direct link to an image)</label>
+        <input type="text" id="imageUrlInput" placeholder="https://example.com/aurebesh-photo.jpg" style="width:100%; padding:10px 15px; background:rgba(5,5,20,0.8); border:1px solid #334466; border-radius:8px; color:#e0e8f0; font-family:inherit; font-size:0.9em; margin-bottom:12px;">
+      </div>
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">📷</div>
+        <p>Drop an image here or click to upload</p>
+        <p style="font-size: 0.75em; color: #556677; margin-top: 5px;">Supports: photos, screenshots, departure boards, signs, product labels</p>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+      </div>
+      <div class="image-preview" id="imagePreview" style="display:none;">
+        <img id="previewImg" style="max-width:100%; border-radius: 8px; border: 1px solid #334466;">
+      </div>
+      <div class="btn-row" style="margin-top: 15px;">
+        <button class="translate-btn" id="scanBtn" style="background: linear-gradient(135deg, #2a1a3a, #4a2a6a); color: #cc88ff;" disabled>⟨ SCAN AUREBESH ⟩</button>
+        <button class="image-btn" id="scanCallToggleBtn" aria-expanded="false" aria-controls="scanCallPanel">📞 VIA CALL</button>
+      </div>
+
+      <div class="call-panel" id="scanCallPanel">
+        <label for="scanCallPhone">HK-47 WILL CALL YOU WITH WHAT THE SIGN SAYS</label>
+        <div class="btn-row">
+          <input type="tel" class="call-phone" id="scanCallPhone" placeholder="+353871234567" autocomplete="tel">
+          <button class="translate-btn" id="scanCallBtn" style="flex: 0 0 auto; background: linear-gradient(135deg, #2a1a3a, #4a2a6a); color: #cc88ff;">⟨ SCAN &amp; CALL ME ⟩</button>
+          <button class="image-btn" id="scanCallAddBtn" style="flex: 0 0 auto;" title="Add this number to known_contacts.json">＋ ADD NUMBER</button>
+        </div>
+        <p class="call-hint">International format (e.g. +353 for Ireland). The number must be listed in known_contacts.json — use ＋ ADD NUMBER to add it.</p>
+        <div class="call-status" id="scanCallStatus" role="status" aria-live="polite"></div>
+      </div>
+      <div class="loading" id="scanLoading">
+        <div class="spinner"></div>
+        <p style="color: #88aacc; margin-top: 10px; font-size: 0.85em;">Scanning for Aurebesh glyphs...</p>
+      </div>
+      <div class="result-area" id="scanResult">
+        <div class="result-label">SCAN RESULT</div>
+        <div class="result-text" id="scanAnswer" style="white-space: pre-wrap;"></div>
+      </div>
+    </div>
+
+    <div class="alphabet-section">
+      <h2>✦ AUREBESH ALPHABET ✦</h2>
+      <div class="alphabet-grid" id="alphabetGrid"></div>
+    </div>
+
+    <div class="history-section">
+      <h2>✦ HISTORY OF AUREBESH ✦</h2>
+      <div class="history-content">
+        <div class="history-block">
+          <h3>Origins — Behind the Scenes</h3>
+          <p>Aurebesh first appeared as background set decoration in <strong>Return of the Jedi</strong> (1983), visible on computer screens aboard the second Death Star. At that time, the characters were purely decorative — random shapes with no assigned phonetic values.</p>
+        </div>
+        <div class="history-block">
+          <h3>Codification by West End Games</h3>
+          <p>In 1993, graphic artist Stephen Crane designed a complete, consistent alphabet for West End Games' <em>Star Wars Miniatures Battles Companion</em>. He assigned each glyph a phonetic value mapped to the Latin alphabet, creating the system fans know today. The name "Aurebesh" comes from the first two letters: <strong>Aurek</strong> (A) and <strong>Besh</strong> (B) — mirroring how "alphabet" derives from Greek alpha and beta.</p>
+        </div>
+        <div class="history-block">
+          <h3>In-Universe History</h3>
+          <p>Within the Star Wars galaxy, Aurebesh is the standard writing system of <strong>Galactic Basic</strong> — the most widely spoken language. It is seen on starship consoles, cantina signs, Imperial propaganda posters, datacards, and holonet transmissions. The script predates the formation of the Galactic Republic and has remained remarkably stable across millennia.</p>
+        </div>
+        <div class="history-block">
+          <h3>Structure</h3>
+          <p>The alphabet contains <strong>26 single letters</strong> (Aurek through Zerek) plus several <strong>digraphs</strong> — single glyphs representing two-letter combinations like Cherek (CH), Thesh (TH), and Shen (SH). Numerals use a separate set of symbols, and punctuation marks exist for commas, periods, and other stops.</p>
+        </div>
+        <div class="history-block">
+          <h3>Prequel & Modern Era</h3>
+          <p>Starting with <strong>The Phantom Menace</strong> (1999), Lucasfilm began deliberately embedding readable Aurebesh into films. Sharp-eyed fans could decode on-screen text for Easter eggs. The tradition continues through <em>The Clone Wars</em>, <em>Rebels</em>, <em>The Mandalorian</em>, <em>Andor</em>, and the sequel trilogy — where set designers use Aurebesh for everything from wanted posters to droid diagnostics.</p>
+        </div>
+        <div class="history-block">
+          <h3>Fan & Official Adoption</h3>
+          <p>Aurebesh has become one of the most recognized constructed scripts in popular culture. Official Star Wars merchandise, theme park signage at Galaxy's Edge, and video games like <em>Jedi: Fallen Order</em> all feature functional Aurebesh text. Fan-made fonts are widely available, making it possible to type and read in Aurebesh across digital platforms.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <p>Aurebesh is the writing system used in the Star Wars galaxy.</p>
+      <p>It appears on screens, signs, and documents throughout the films and shows.</p>
+      <p style="margin-top: 15px; color: #ffd700;">May the Force be with you ✦</p>
+    </div>
+  </div>
+
+  <script>
+    // Alphabet data
+    const alphabet = {
+      'A': 'Aurek', 'B': 'Besh', 'C': 'Cresh', 'D': 'Dorn',
+      'E': 'Esk', 'F': 'Forn', 'G': 'Grek', 'H': 'Herf',
+      'I': 'Isk', 'J': 'Jenth', 'K': 'Krill', 'L': 'Leth',
+      'M': 'Mern', 'N': 'Nern', 'O': 'Osk', 'P': 'Peth',
+      'Q': 'Qek', 'R': 'Resh', 'S': 'Senth', 'T': 'Trill',
+      'U': 'Usk', 'V': 'Vev', 'W': 'Wesk', 'X': 'Xesh',
+      'Y': 'Yirt', 'Z': 'Zerek'
+    };
+
+    // Build alphabet grid
+    const grid = document.getElementById('alphabetGrid');
+    for (const [letter, name] of Object.entries(alphabet)) {
+      const item = document.createElement('div');
+      item.className = 'alpha-item';
+      item.innerHTML = `<span class="alpha-letter">${letter}</span><span class="alpha-name">${name}</span>`;
+      grid.appendChild(item);
+    }
+
+    // Mode toggle
+    let currentMode = 'translate';
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const inputLabel = document.getElementById('inputLabel');
+    const inputText = document.getElementById('inputText');
+
+    modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+
+        if (currentMode === 'decode') {
+          inputLabel.textContent = 'ENTER AUREBESH NAMES TO DECODE';
+          inputText.placeholder = 'e.g. Herf-Esk-Leth-Leth-Osk / Wesk-Osk-Resh-Leth-Dorn';
+        } else {
+          inputLabel.textContent = 'ENTER TEXT TO TRANSLATE';
+          inputText.placeholder = 'Type something... e.g. May the Force be with you';
+        }
+      });
+    });
+
+    // Translate button
+    const translateBtn = document.getElementById('translateBtn');
+    const imageBtn = document.getElementById('imageBtn');
+    const resultArea = document.getElementById('resultArea');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultText = document.getElementById('resultText');
+    const resultImage = document.getElementById('resultImage');
+    const loading = document.getElementById('loading');
+
+    translateBtn.addEventListener('click', async () => {
+      const text = inputText.value.trim();
+      if (!text) return;
+
+      loading.classList.add('visible');
+      resultArea.classList.remove('visible');
+      resultImage.innerHTML = '';
+
+      try {
+        const res = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, mode: currentMode })
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          resultText.textContent = data.error;
+        } else {
+          resultLabel.textContent = currentMode === 'decode' ? 'DECODED ENGLISH' : 'AUREBESH TRANSLATION';
+          resultText.textContent = data.result;
+
+          // Show the server-rendered Aurebesh image for translate mode
+          if (currentMode === 'translate') {
+            if (data.imageUrl) {
+              const img = document.createElement('img');
+              img.src = data.imageUrl;
+              img.alt = `Aurebesh rendering of ${text}`;
+              resultImage.appendChild(img);
+
+              const downloadLink = document.createElement('a');
+              downloadLink.href = data.imageUrl;
+              downloadLink.download = `aurebesh_${text.replace(/\s+/g, '_')}.png`;
+              downloadLink.className = 'download-btn';
+              downloadLink.textContent = '⬇ Download PNG';
+              resultImage.appendChild(downloadLink);
+            }
+          }
+        }
+
+        resultArea.classList.add('visible');
+      } catch (err) {
+        resultText.textContent = 'Connection error. Is the server running?';
+        resultArea.classList.add('visible');
+      }
+
+      loading.classList.remove('visible');
+    });
+
+    // Image button — just generate and show
+    imageBtn.addEventListener('click', async () => {
+      const text = inputText.value.trim();
+      if (!text) return;
+
+      loading.classList.add('visible');
+      resultArea.classList.remove('visible');
+      resultImage.innerHTML = '';
+
+      try {
+        const res = await fetch('/api/image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          resultText.textContent = data.error;
+        } else {
+          resultLabel.textContent = 'AUREBESH RENDERING';
+          resultText.textContent = `"${text}" as it would appear in the Star Wars galaxy:`;
+          resultImage.innerHTML = `<img src="${data.imageUrl}" alt="Aurebesh rendering of ${text}">`;
+        }
+
+        resultArea.classList.add('visible');
+      } catch (err) {
+        resultText.textContent = 'Connection error. Is the server running?';
+        resultArea.classList.add('visible');
+      }
+
+      loading.classList.remove('visible');
+    });
+
+    // === HK-47 CALLBACK (Twilio Voice) ===
+    // Shared by the translate, droid and scanner sections. Each has a
+    // "VIA CALL" toggle and a panel with a phone field, button and status line.
+    const CALL_STATUS_TEXT = {
+      'queued': '📡 Call queued — HK-47 is warming up its vocabulator...',
+      'initiated': '📡 Dialling...',
+      'ringing': '📞 Ringing — pick up, master!',
+      'in-progress': '🗣 HK-47 is speaking...',
+      'completed': '✓ Call complete.',
+      'busy': '✗ Line busy. Try again shortly.',
+      'no-answer': '✗ No answer.',
+      'failed': '✗ Call failed.',
+      'canceled': '✗ Call canceled.',
+    };
+    const FAILED_CALL_STATUSES = ['busy', 'no-answer', 'failed', 'canceled'];
+    const FINAL_CALL_STATUSES = ['completed', ...FAILED_CALL_STATUSES];
+    const callPhoneInputs = document.querySelectorAll('.call-phone');
+
+    // One saved number, shared by all three panels
+    let savedPhone = '';
+    try { savedPhone = localStorage.getItem('hk47Phone') || ''; } catch (_) {}
+    callPhoneInputs.forEach(input => {
+      input.value = savedPhone;
+      input.addEventListener('input', () => {
+        callPhoneInputs.forEach(other => { if (other !== input) other.value = input.value; });
+      });
+    });
+
+    /**
+     * Wire up one call panel.
+     * @param {string} prefix - element id prefix, e.g. 'call' → callToggleBtn, callPanel, callPhone, callBtn, callAddBtn, callStatus
+     * @param {(phone: string) => Promise<object|null>} run - does the work; resolves to the server's JSON
+     *   ({ call } on success, { error } / { callError } on failure) or null if there's nothing to do
+     */
+    function setupCallPanel(prefix, run) {
+      const toggle = document.getElementById(prefix + 'ToggleBtn');
+      const panel = document.getElementById(prefix + 'Panel');
+      const phoneInput = document.getElementById(prefix + 'Phone');
+      const button = document.getElementById(prefix + 'Btn');
+      const addButton = document.getElementById(prefix + 'AddBtn');
+      const status = document.getElementById(prefix + 'Status');
+      let pollTimer = null;
+
+      const show = (text, isError) => {
+        status.textContent = text;
+        status.classList.toggle('error', !!isError);
+      };
+
+      toggle.addEventListener('click', () => {
+        const open = panel.classList.toggle('visible');
+        toggle.classList.toggle('active', open);
+        toggle.setAttribute('aria-expanded', open);
+        if (open) phoneInput.focus();
+      });
+
+      function poll(sid) {
+        clearInterval(pollTimer);
+        let failures = 0;
+        pollTimer = setInterval(async () => {
+          try {
+            const res = await fetch(`/api/call/${sid}`);
+            const data = await res.json();
+            if (res.status === 404) { clearInterval(pollTimer); show('Lost track of the call (server restarted?).', true); return; }
+            if (data.error) throw new Error(data.error);
+            failures = 0;
+            show(CALL_STATUS_TEXT[data.status] || data.status, FAILED_CALL_STATUSES.includes(data.status));
+            if (FINAL_CALL_STATUSES.includes(data.status)) clearInterval(pollTimer);
+          } catch (err) {
+            // Ride out brief network blips; give up after 3 misses in a row
+            if (++failures >= 3) {
+              clearInterval(pollTimer);
+              show('Call status unavailable — check your phone, master.', true);
+            }
+          }
+        }, 2000);
+      }
+
+      addButton.addEventListener('click', async () => {
+        const phone = phoneInput.value.trim();
+        if (!phone) { show('Enter a phone number.', true); phoneInput.focus(); return; }
+        addButton.disabled = true;
+        try {
+          const res = await fetch('/api/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone })
+          });
+          const data = await res.json();
+          show(data.error || (data.added ? `✅ ${data.phone} added to known contacts.` : `${data.phone} is already a known contact.`), !!data.error);
+        } catch (err) {
+          show('Connection error. Is the server running?', true);
+        }
+        addButton.disabled = false;
+      });
+
+      button.addEventListener('click', async () => {
+        const phone = phoneInput.value.trim();
+        if (!phone) { show('Enter a phone number.', true); phoneInput.focus(); return; }
+        try { localStorage.setItem('hk47Phone', phone); } catch (_) {}
+
+        button.disabled = true;
+        show('📡 Working on it — HK-47 will call when ready...');
+        try {
+          const data = await run(phone);
+          if (!data) {
+            show('');
+          } else if (data.callError || data.error) {
+            show(data.callError || data.error, true);
+          } else if (data.call) {
+            // Only a successful new call replaces the one being tracked
+            show((CALL_STATUS_TEXT[data.call.status] || '📡 Calling...') +
+              (data.call.truncated ? ' (Too long for one call — HK-47 will read the first part.)' : ''));
+            poll(data.call.callSid);
+          }
+        } catch (err) {
+          show('Connection error. Is the server running?', true);
+        }
+        button.disabled = false;
+      });
+
+      return { show };
+    }
+
+    const translateCall = setupCallPanel('call', async (phone) => {
+      const text = inputText.value.trim();
+      if (!text) { translateCall.show('Enter some text to translate first.', true); return null; }
+
+      const res = await fetch('/api/call', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, phone, mode: currentMode })
+      });
+      const data = await res.json();
+      if (!data.error) {
+        resultLabel.textContent = currentMode === 'decode' ? 'DECODED ENGLISH — SENT BY CALL' : 'AUREBESH TRANSLATION — SENT BY CALL';
+        resultText.textContent = data.result;
+        resultImage.innerHTML = '';
+        resultArea.classList.add('visible');
+      }
+      return data;
+    });
+
+    // Enter key to translate
+    inputText.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        translateBtn.click();
+      }
+    });
+
+    // === AI DROID ASSISTANT ===
+    const aiBtn = document.getElementById('aiBtn');
+    const aiInput = document.getElementById('aiInput');
+    const aiLoading = document.getElementById('aiLoading');
+    const aiResult = document.getElementById('aiResult');
+    const aiAnswer = document.getElementById('aiAnswer');
+
+    // Ask the droid; with callPhone, HK-47 also phones the answer through.
+    // Resolves to the server's JSON, or null if there was no question.
+    async function askDroid(callPhone) {
+      const question = aiInput.value.trim();
+      if (!question) return null;
+
+      aiLoading.classList.add('visible');
+      aiResult.classList.remove('visible');
+      let data = null;
+
+      try {
+        const res = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(callPhone ? { question, callPhone } : { question })
+        });
+
+        data = await res.json();
+
+        // A rejected phone number (callError) means the question wasn't asked
+        if (!data.callError) {
+          aiAnswer.textContent = data.error || data.answer;
+          aiResult.classList.add('visible');
+        }
+      } catch (err) {
+        aiAnswer.textContent = 'Communication disrupted. Check connection.';
+        aiResult.classList.add('visible');
+        data = { error: 'Communication disrupted. Check connection.' };
+      }
+
+      aiLoading.classList.remove('visible');
+      return data;
+    }
+
+    aiBtn.addEventListener('click', () => askDroid());
+
+    const droidCall = setupCallPanel('aiCall', async (phone) => {
+      if (!aiInput.value.trim()) { droidCall.show('Enter a question for the droid first.', true); return null; }
+      return askDroid(phone);
+    });
+
+    aiInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        aiBtn.click();
+      }
+    });
+
+    // === AUREBESH IMAGE SCANNER ===
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const scanBtn = document.getElementById('scanBtn');
+    const scanLoading = document.getElementById('scanLoading');
+    const scanResult = document.getElementById('scanResult');
+    const scanAnswer = document.getElementById('scanAnswer');
+    const imageUrlInput = document.getElementById('imageUrlInput');
+    let currentImageBase64 = null;
+
+    // Enable scan button if URL is entered
+    imageUrlInput.addEventListener('input', () => {
+      const url = imageUrlInput.value.trim();
+      if (url) {
+        scanBtn.disabled = false;
+      } else if (!currentImageBase64) {
+        scanBtn.disabled = true;
+      }
+    });
+
+    uploadArea.addEventListener('click', () => imageInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        handleImageFile(file);
+      }
+    });
+
+    imageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) handleImageFile(file);
+    });
+
+    function handleImageFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentImageBase64 = e.target.result;
+        previewImg.src = currentImageBase64;
+        imagePreview.style.display = 'block';
+        scanBtn.disabled = false;
+        scanResult.classList.remove('visible');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Scan the image; with callPhone, HK-47 also phones the result through.
+    // Resolves to the server's JSON, or null if there's no image.
+    async function scanImage(callPhone) {
+      const urlValue = imageUrlInput.value.trim();
+      if (!currentImageBase64 && !urlValue) return null;
+
+      scanLoading.classList.add('visible');
+      scanResult.classList.remove('visible');
+      scanBtn.disabled = true;
+      let data = null;
+
+      try {
+        const body = currentImageBase64 
+          ? { imageBase64: currentImageBase64 }
+          : { imageUrl: urlValue };
+        if (callPhone) body.callPhone = callPhone;
+
+        const res = await fetch('/api/read-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        data = await res.json();
+
+        // A rejected phone number (callError) means the image wasn't scanned
+        if (!data.callError) {
+          if (data.error) {
+            scanAnswer.textContent = data.error;
+          } else {
+            scanAnswer.innerHTML = formatScanResult(data.result, data.isStructured);
+          }
+          scanResult.classList.add('visible');
+        }
+      } catch (err) {
+        scanAnswer.textContent = 'Scanner offline. Check connection.';
+        scanResult.classList.add('visible');
+        data = { error: 'Scanner offline. Check connection.' };
+      }
+
+      scanLoading.classList.remove('visible');
+      scanBtn.disabled = false;
+      return data;
+    }
+
+    scanBtn.addEventListener('click', () => scanImage());
+
+    const scanCall = setupCallPanel('scanCall', async (phone) => {
+      if (!currentImageBase64 && !imageUrlInput.value.trim()) { scanCall.show('Upload an image or paste a URL first.', true); return null; }
+      return scanImage(phone);
+    });
+
+    /**
+     * Format scan results — render tables as HTML tables, text as formatted blocks
+     */
+    function formatScanResult(text, isStructured) {
+      if (!isStructured) {
+        return escapeHtml(text).replace(/\n/g, '<br>');
+      }
+
+      let html = '';
+      const lines = text.split('\n');
+      let inTable = false;
+      let inText = false;
+      let tableHtml = '';
+      let isHeaderRow = true;
+
+      for (const line of lines) {
+        if (line.includes('===TABLE START===')) {
+          inTable = true;
+          tableHtml = '<div class="scan-table-wrap"><table class="scan-table">';
+          isHeaderRow = true;
+          continue;
+        }
+        if (line.includes('===TABLE END===')) {
+          inTable = false;
+          tableHtml += '</table></div>';
+          html += tableHtml;
+          continue;
+        }
+        if (line.includes('===TEXT START===')) {
+          inText = true;
+          html += '<div class="scan-text-block">';
+          continue;
+        }
+        if (line.includes('===TEXT END===')) {
+          inText = false;
+          html += '</div>';
+          continue;
+        }
+
+        if (inTable) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('HEADER:')) {
+            tableHtml += '<caption>' + escapeHtml(trimmed.replace('HEADER:', '').trim()) + '</caption>';
+            continue;
+          }
+          if (trimmed.startsWith('|---') || trimmed === '|') continue;
+          if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+            const cells = trimmed.slice(1, -1).split('|').map(c => c.trim());
+            if (isHeaderRow) {
+              tableHtml += '<thead><tr>' + cells.map(c => '<th>' + escapeHtml(c) + '</th>').join('') + '</tr></thead><tbody>';
+              isHeaderRow = false;
+            } else {
+              tableHtml += '<tr>' + cells.map(c => '<td>' + escapeHtml(c) + '</td>').join('') + '</tr>';
+            }
+          }
+          continue;
+        }
+
+        if (inText) {
+          const match = line.match(/^LINE \d+:\s*(.*)$/);
+          if (match) {
+            html += '<p class="scan-line">' + escapeHtml(match[1]) + '</p>';
+          } else if (line.trim()) {
+            html += '<p class="scan-line">' + escapeHtml(line) + '</p>';
+          }
+          continue;
+        }
+
+        // Outside structured blocks — metadata (confidence, notes, corrections)
+        if (line.trim()) {
+          const metaMatch = line.match(/^(CONFIDENCE|NOTES|CORRECTIONS):\s*(.*)$/i);
+          if (metaMatch) {
+            html += '<p class="scan-meta"><strong>' + escapeHtml(metaMatch[1]) + ':</strong> ' + escapeHtml(metaMatch[2]) + '</p>';
+          } else {
+            html += '<p>' + escapeHtml(line) + '</p>';
+          }
+        }
+      }
+
+      return html || escapeHtml(text).replace(/\n/g, '<br>');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+  </script>
+</body>
+</html>
