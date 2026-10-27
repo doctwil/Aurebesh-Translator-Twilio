@@ -11,6 +11,14 @@ A web app that translates English to **Aurebesh** — the writing system of the 
 - **AI Droid** — Ask HK-47 about Star Wars lore and Aurebesh
 - **Via Call** — HK-47 phones you (Twilio Voice) and reads the result aloud: a translation, the droid's answer, or what a scanned sign says
 
+
+<img width="1007" height="631" alt="Screenshot 2026-10-27 at 19 14 40" src="https://github.com/user-attachments/assets/ac3abd88-e8da-4530-a871-ec75e8b399b7" />
+
+
+<img width="1003" height="647" alt="Screenshot 2026-10-27 at 19 14 55" src="https://github.com/user-attachments/assets/8d83b197-60c4-4281-bf5e-ea85380878e9" />
+
+
+
 ## Quick Start
 
 If `node_modules/` and `.env` are already in place:
