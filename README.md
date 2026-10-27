@@ -1,4 +1,4 @@
-# ✦ Twilio_Aurebesh_public — Aurebesh Star Wars Translator ✦
+# ✦ Aurebesh Translator ✦
 
 A web app that translates English to **Aurebesh** — the writing system of the Star Wars galaxy — and reads Aurebesh back from photos.
 
